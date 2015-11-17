@@ -1,14 +1,35 @@
 <head>
-  <title>d-code</title>
+  <title>D-CODE</title>
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="questioner">
+	<div class="question">{{question}}</div>
+	<div class="players">
+		{{#each players}}
+		<div>
+			<span class="player_name">{{name}}</span>
+			<span class="score">{{score}}</span>
+		</div>
+		{{/each}}
+	</div>
+	<button>reset</button>
+</template>
+
+<template name="player">
+	<div class="player">{{player}}</div>
+	<form>
+		<input type="text" pattern="[0-9]{4}" title="4 digits"/>
+		<button type="reset">Clear</button>
+		<button type="submit">Submit</button>
+	</form>
+</template>
+
+<template name="register">
+	<form>
+		<input type="text" name="player"/>
+		<button type="submit">Submit</button>
+	</form>
 </template>
