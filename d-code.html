@@ -6,20 +6,37 @@
 </body>
 
 <template name="questioner">
-	<div class="question">{{question}}</div>
-	<div class="players">
-		{{#each players}}
-			{{> score}}
-		{{/each}}
-	</div>
-	<button id="next">next</button>
-	<button id="reset">reset</button>
+	{{#if wait}}
+		{{> stop}}
+	{{else}}
+		{{> go}}
+	{{/if}}
+	<button id="reset">Reset</button>
 </template>
 
-<template name="score">
-	<div>
-		<span class="player_name">{{name}}</span>
-		<span class="score">{{score}}</span>
+<template name="stop">
+	<div class="question">
+		<button id="start">Start</button>
+	</div>
+	{{> players}}
+</template>
+
+<template name="go">
+	<div class="question">
+		{{question}}
+	</div>
+	{{> players}}
+	<button id="next">Next</button>
+</template>
+
+<template name="players">
+	<div class="players">
+		{{#each players}}
+		<div>
+			<span class="player_name">{{name}}</span>
+			<span class="score">{{score}}</span>
+		</div>
+		{{/each}}
 	</div>
 </template>
 

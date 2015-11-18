@@ -1,6 +1,13 @@
+questions = new Mongo.Collection('questions');
 players = new Mongo.Collection('players');
-questions = new Mongo.Collection('ques_set');
-code = 0;
+code = new Mongo.Collection('code');
+resv_ids = [];
+q_size = 4;
+config = {
+  'full score': 3,
+  'max player': 3,
+  'resv size' : 2
+};
 
 Router.route('/', function () {
   this.render('questioner');
@@ -15,48 +22,66 @@ Router.route('/player', function () {
   }
 });
 
-if (Meteor.isClient) {
-  Session.setDefault('q_idx', Math.round(Math.random() * 3) + 1);
-  prepare = function() {
-    ques_set.forEach(function(set) {
-      set.sort(function(a, b) {
-        return Math.random() < 0.5 ? 1 : -1;
-      });
-    });
+if(Meteor.isClient) {
+  var
+  showQuestion = function() {
+    var
+    _id, question;
+
+    do {
+      _id = Math.round(Math.random() * q_size);
+    } while(resv_ids.indexOf(_id) > -1);
+    if(resv_ids.length == config['resv size']) {
+      resv_ids.shift();
+    }
+    resv_ids.push(_id);
+    question = questions.findOne(_id);
+    Session.set('ask', question.ask);
+    code.update({_id: 'dummy'}, {$set: {code: question.ans, solved: false}}, {upsert: true});
   };
 
-  document.onkeydown = function (e) {
-    return (e.which || e.keyCode) != 116;
-  };
+  Session.setDefault('wait', true);
+  Template.players.helpers({
+    players: function() {
+      return players.find({}, {sort: {score: -1}});
+    }
+  });
 
-  Tracker.autorun(function() {
-    if(players.find({}).count() == 0) {
-      Session.set('player', null);
+  Template.go.helpers({
+    question: function() {
+      return Session.get('ask');
     }
   });
   
   Template.questioner.helpers({
-    players: function() {
-      return players.find({}, {sort: {score: -1}});
-    },
-    question: function() {
-      // ques_set = questions.find({}).fetch();
-      // prepare();
-      // Session.set('question', ques_set[s_idx][q_idx++]);
-      Session.set('question', questions.findOne(Session.get('q_idx')));
-      code = Session.get('question').ans;
-      return Session.get('question').ask;
+    wait: function() {
+      return Session.get('wait');
     }
   });
 
   Template.questioner.events({
     'click #reset': function() {
       Meteor.call('resetPlayers')
-    },
-    'click #next': function() {
-      Session.set('q_idx', Math.round(Math.random() * 3) + 1);
+      Session.set('wait', true);
     }
   });
+
+  Template.go.events({
+    'click #next': function() {
+      showQuestion();
+    }
+  });
+
+  Template.stop.events({
+    'click #start': function() {
+      Session.set('wait', false);
+      showQuestion();
+    }
+  });
+
+  document.onkeydown = function (e) {
+    return (e.which || e.keyCode) != 116;
+  };
 
   Template.player.helpers({
     player: function () {
@@ -77,18 +102,16 @@ if (Meteor.isClient) {
   Template.register.events({
     'submit form': function (event) {
       var
-      player = players.findOne({name: Session.get('player')}),
       player_name = event.target.player.value,
       _id;
 
       event.preventDefault();
-      if(player) {
+      if(players.findOne({name: player_name})) {
         Session.set('err', 'มีผู้เล่นชื่อนี้แล้ว');
       }
       else {
         _id = players.insert({name: player_name, score: 0});
-        player = players.findOne(_id);
-        Session.set('player', player.name);
+        Session.set('player', players.findOne(_id).name);
       }
     }
   });
@@ -101,8 +124,18 @@ if (Meteor.isServer) {
         return players.remove({});
       },
       checkCode: function(_name, _code) {
-        if(_code == '7735') {
+        var
+        solution = code.findOne({});
+
+        if(solution.solved) {
+
+        }
+        else if(_code == solution.code) {
+          code.update({_id: 'dummy'}, {$set: {solved: true}});
           players.update({name: _name}, {$inc: {score: 1}});
+        }
+        else {
+
         }
       }
     });
@@ -110,7 +143,8 @@ if (Meteor.isServer) {
 }
 
 /*
-db.ques_set.insert([
+db.questions.insert([
+  {_id: 0, ask: 'แก้วแรดสามฤดู', ans: '3000'},
   {_id: 1, ask: 'พระจันทร์ตั้งโด่เด่', ans: '3002'},
   {_id: 2, ask: 'เปาบุ้นจิ้น', ans: '1200'},
   {_id: 3, ask: 'บนฟ้าเป็ดร้องอู๊ด', ans: '2827'},
