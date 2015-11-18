@@ -9,19 +9,24 @@
 	<div class="question">{{question}}</div>
 	<div class="players">
 		{{#each players}}
-		<div>
-			<span class="player_name">{{name}}</span>
-			<span class="score">{{score}}</span>
-		</div>
+			{{> score}}
 		{{/each}}
 	</div>
-	<button>reset</button>
+	<button id="next">next</button>
+	<button id="reset">reset</button>
+</template>
+
+<template name="score">
+	<div>
+		<span class="player_name">{{name}}</span>
+		<span class="score">{{score}}</span>
+	</div>
 </template>
 
 <template name="player">
 	<div class="player">{{player}}</div>
 	<form>
-		<input type="text" pattern="[0-9]{4}" title="4 digits"/>
+		<input name="ans" type="text" pattern="[0-9]{4}" title="4 digits"/>
 		<button type="reset">Clear</button>
 		<button type="submit">Submit</button>
 	</form>
