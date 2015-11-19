@@ -5,23 +5,24 @@
 <body>
 </body>
 
+<!-- สำหรับ แสดงคำถาม -->
 <template name="questioner">
 	{{#if wait}}
-		{{> stop}}
+		{{> starter}}
 	{{else}}
-		{{> go}}
+		{{> question}}
 	{{/if}}
 	<button id="reset">Reset</button>
 </template>
 
-<template name="stop">
+<template name="starter">
 	<div class="question">
 		<button id="start">Start</button>
 	</div>
 	{{> players}}
 </template>
 
-<template name="go">
+<template name="question">
 	<div class="question">
 		{{question}}
 	</div>
@@ -32,7 +33,7 @@
 <template name="players">
 	<div class="players">
 		{{#each players}}
-		<div>
+		<div class="{{status}}">
 			<span class="player_name">{{name}}</span>
 			<span class="score">{{score}}</span>
 		</div>
@@ -40,18 +41,21 @@
 	</div>
 </template>
 
+<!-- สำหรับ ตอบคำถาม -->
 <template name="player">
-	<div class="player">{{player}}</div>
-	<form>
+	<form id="code">
+		<div class="player">{{player}}</div>
 		<input name="ans" type="text" pattern="[0-9]{4}" title="4 digits"/>
 		<button type="reset">Clear</button>
 		<button type="submit">Submit</button>
+		<div class="result">{{result}}</div>
 	</form>
 </template>
 
 <template name="register">
-	<form>
-		<input type="text" name="player"/>
+	<form id="register">
+		<div class="error">{{error}}</div>
+		<input type="text" name="player"/><br/>
 		<button type="submit">Submit</button>
 	</form>
 </template>
