@@ -42,36 +42,28 @@ if(Meteor.isClient) {
   Template.questioner.helpers({
     wait: function() {
       return Session.get('wait');
+    },
+    question: function() {
+      return Session.get('ask');
+    },
+    players: function() {
+      return players.find({}, {sort: {score: -1}});
+    },
+    solved: function() {
+      return Session.get('solved');
     }
   });
   Template.questioner.events({
-    'click #reset': function() {
-      Meteor.call('resetPlayers')
-      Session.set('wait', true);
-    }
-  });
-
-  Template.starter.events({
     'click #start': function() {
       Session.set('wait', false);
       showQuestion();
-    }
-  });
-
-  Template.question.helpers({
-    question: function() {
-      return Session.get('ask');
-    }
-  });
-  Template.question.events({
+    },
     'click #next': function() {
       showQuestion();
-    }
-  });
-
-  Template.players.helpers({
-    players: function() {
-      return players.find({}, {sort: {score: -1}});
+    },
+    'click #reset': function() {
+      Meteor.call('resetPlayers')
+      Session.set('wait', true);
     }
   });
 
@@ -80,6 +72,9 @@ if(Meteor.isClient) {
     player: function () {
       if(players.find({}).count() == 0) {
         Session.set('player', null);
+      }
+      else if(players.findOne({name: Session.get('player')}).init) {
+        Session.set('result', '');
       }
       return Session.get('player');
     },
@@ -96,6 +91,9 @@ if(Meteor.isClient) {
       });
     }
   });
+  Template.player.rendered = function() {
+    this.find('input').focus();
+  }
 
   // ส่วนลงชื่อผู้เล่น
   Template.register.helpers({
@@ -146,7 +144,7 @@ if (Meteor.isServer) {
         }
         else if(_code == code) {
           solved = true;
-          players.update({}, {$set: {status: ''}});
+          players.update({}, {$set: {status: '', init: false}});
           players.update({name: _name}, {$inc: {score: 1}, $set: {status: 'solver'}});
           return 'Correct';
         }
@@ -157,6 +155,7 @@ if (Meteor.isServer) {
       setSolution: function(_code) {
         code = _code;
         solved = false;
+        players.update({}, {$set: {init: true}});
       }
     });
   });

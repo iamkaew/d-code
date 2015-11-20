@@ -1,5 +1,9 @@
 /* CSS declarations go here */
-#code, #register {
+body, input, button {
+	font-size: 36px;
+}
+
+form {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -7,15 +11,60 @@
 	bottom: 0;
 	background-color: #000;
 	text-align: center;
-	font-size: 36px;
+	color: #FFF;
 }
 
-#register *, #code * {
-	font-size: 36px;
+form * {
 	margin: 1em;
 }
 
+form .title {
+	font-weight: bold;
+}
+
+#register button {
+	background: transparent;
+	border: solid blue 2px;
+	color: #FFF;
+	padding: 0 1em;
+}
+
+#register button:hover {
+	background-color: blue;
+	cursor: pointer;
+}
+
+#register input {
+	display: block;
+	padding: .25em .5em;
+	margin: 1em auto;
+	width: 13em;
+	text-align: center;
+}
+
 #register .error {
-	display: inline-block;
-	height: 2em;
+	display: block;
+	height: 1em;
+	color: red;
+	margin-bottom: 0;
+	vertical-align: bottom;
+}
+
+@font-face {
+  font-family: code;
+  src: url("/digital-7__mono_.ttf");
+}
+
+#code input {
+	font-family: code;
+	font-size: 4em;
+	border: solid 2px green;
+	background: transparent;
+	color: green;
+	text-align: center;
+	outline: none;
+	box-shadow: none;
+	width: 4em;
+	display: block;
+	margin: 1em auto;
 }

@@ -7,30 +7,19 @@
 
 <!-- สำหรับ แสดงคำถาม -->
 <template name="questioner">
-	{{#if wait}}
-		{{> starter}}
-	{{else}}
-		{{> question}}
-	{{/if}}
-	<button id="reset">Reset</button>
-</template>
-
-<template name="starter">
 	<div class="question">
-		<button id="start">Start</button>
+		{{#if wait}}
+			<button id="start">Start</button>
+		{{else}}
+			{{> question}}
+			{{#if solved}}
+				<div class="solved">
+					<p>Solved</p>
+					<button id="next">Next</button>
+				</div>
+			{{/if}}
+		{{/if}}
 	</div>
-	{{> players}}
-</template>
-
-<template name="question">
-	<div class="question">
-		{{question}}
-	</div>
-	{{> players}}
-	<button id="next">Next</button>
-</template>
-
-<template name="players">
 	<div class="players">
 		{{#each players}}
 		<div class="{{status}}">
@@ -39,23 +28,23 @@
 		</div>
 		{{/each}}
 	</div>
+	<button id="reset">Reset</button>
 </template>
 
 <!-- สำหรับ ตอบคำถาม -->
 <template name="player">
 	<form id="code">
-		<div class="player">{{player}}</div>
-		<input name="ans" type="text" pattern="[0-9]{4}" title="4 digits"/>
-		<button type="reset">Clear</button>
-		<button type="submit">Submit</button>
+		<div class="title">{{player}}</div>
+		<input name="ans" type="text" maxlength="4" autocomplete="off"/>
 		<div class="result">{{result}}</div>
 	</form>
 </template>
 
 <template name="register">
 	<form id="register">
+		<div class="title">กรุณาตั้งชื่อผู้เล่น</div>
 		<div class="error">{{error}}</div>
-		<input type="text" name="player"/><br/>
-		<button type="submit">Submit</button>
+		<input type="text" name="player" maxlength="15"/>
+		<button type="submit">ตกลง</button>
 	</form>
 </template>
