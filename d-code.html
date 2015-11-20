@@ -3,27 +3,24 @@
 </head>
 
 <body>
+	<div id="footer"><img src="/it.png" height="28px"/>@DPU เรียน เล่น เป็นธรรมชาติ</div>
 </body>
 
 <!-- สำหรับ แสดงคำถาม -->
 <template name="questioner">
-	<div class="question">
+	<div id="question">
 		{{#if wait}}
 			<button id="start">Start</button>
 		{{else}}
-			{{> question}}
-			{{#if solved}}
-				<div class="solved">
-					<p>Solved</p>
-					<button id="next">Next</button>
-				</div>
-			{{/if}}
+			<div class="title">Hint Message</div>
+			<p>{{question}}</p>
+			<button id="next">Next</button>
 		{{/if}}
 	</div>
-	<div class="players">
+	<div id="players">
 		{{#each players}}
-		<div class="{{status}}">
-			<span class="player_name">{{name}}</span>
+		<div class="player {{status}}">
+			<span>{{name}}</span>
 			<span class="score">{{score}}</span>
 		</div>
 		{{/each}}
@@ -33,18 +30,23 @@
 
 <!-- สำหรับ ตอบคำถาม -->
 <template name="player">
-	<form id="code">
-		<div class="title">{{player}}</div>
-		<input name="ans" type="text" maxlength="4" autocomplete="off"/>
+	<form id="code" class="{{blink}}">
+		<div class="title">ทีม: {{player}}</div>
 		<div class="result">{{result}}</div>
+		<input name="ans" type="text" maxlength="4" autocomplete="off"/>
+		<div class="instruction">
+			พิมพ์รหัสเป็นตัวเลข 4 ตัว แล้วกด Enter
+		</div>
 	</form>
 </template>
 
 <template name="register">
 	<form id="register">
 		<div class="title">กรุณาตั้งชื่อผู้เล่น</div>
-		<div class="error">{{error}}</div>
-		<input type="text" name="player" maxlength="15"/>
-		<button type="submit">ตกลง</button>
+		<div class="result">{{error}}</div>
+		<input type="text" name="player" maxlength="15" autocomplete="off"/>
+		<div class="instruction">
+			พิมพ์ชื่อผู้เล่นความยาวไม่เกิน 15 ตัวอักษร แล้วกด Enter
+		</div>
 	</form>
 </template>

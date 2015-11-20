@@ -8,7 +8,7 @@ form {
 	top: 0;
 	left: 0;
 	right: 0;
-	bottom: 0;
+	bottom: 50px;
 	background-color: #000;
 	text-align: center;
 	color: #FFF;
@@ -18,20 +18,107 @@ form * {
 	margin: 1em;
 }
 
+button {
+	background: transparent;
+	border: solid 2px blue;
+	border-radius: 2px;
+	color: blue;
+}
+
+button:hover {
+	background-color: blue;
+	color: #FFF;
+	cursor: pointer;
+}
+
+#question {
+	position: absolute;
+	left: 4em;
+	right: 4em;
+	height: 10em;
+	top: 1em;
+	display: block;
+	background-color: yellow;
+	text-align: center;
+	border: solid 4px orange;
+	border-radius: 8px;
+}
+
+#question .title {
+	font-weight: bold;
+	color: blue;
+}
+
+#question #next {
+	position: absolute;
+	bottom: .5em;
+	width: 4em;
+	left: 50%;
+	margin-left: -2em;
+}
+
+#question #start {
+	margin-top: 4.5em;
+}
+
+#players {
+	position: absolute;
+	width: 18em;
+	bottom: 120px;
+	left: 50%;
+	margin-left: -9em;
+}
+
+.player {
+	background-color: #000;
+	color: #FFF;
+	padding: .25em .5em;
+	border-radius: 2px;
+	border: outset 2px gray;
+}
+
+.score {
+	border: inset 1px gray;
+	border-radius: 4px;
+	text-align: center;
+	width: 2em;
+	display: inline-block;
+	position: absolute;
+	right: .5em;
+}
+
+#reset {
+	display: block;
+	position: absolute;
+	bottom: 58px;
+	width: 18em;
+	left: 50%;
+	margin-left: -9em;
+	outline: none;
+}
+
 form .title {
 	font-weight: bold;
+	color: orange;
 }
 
-#register button {
-	background: transparent;
-	border: solid blue 2px;
+.instruction {
+	font-size: .75em;
+	color: yellow;
+}
+
+#footer {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 50px;
+	background-color: gray;
+	text-align: center;
+	font-size: .5em;
 	color: #FFF;
-	padding: 0 1em;
-}
-
-#register button:hover {
-	background-color: blue;
-	cursor: pointer;
+	line-height: 3.5em;
+	vertical-align: bottom;
 }
 
 #register input {
@@ -42,7 +129,7 @@ form .title {
 	text-align: center;
 }
 
-#register .error {
+.result {
 	display: block;
 	height: 1em;
 	color: red;
@@ -67,4 +154,28 @@ form .title {
 	width: 4em;
 	display: block;
 	margin: 1em auto;
+}
+
+#code.blink .result {
+	color: green;
+}
+
+#code.blink {
+	animation-direction: normal;
+    animation-duration: .5s;
+    animation-iteration-count: infinite;
+    animation-name: blink;
+}
+
+@keyframes blink {
+    0% {
+        background-color: #000;
+    }
+    50% {
+        background-color: #FFF;
+    }
+}
+
+.solver {
+    background-color: green;
 }
