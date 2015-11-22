@@ -33,7 +33,7 @@ if(Meteor.isClient) {
     resv_ids.push(_id);
     question = questions.findOne(_id);
     Session.set('ask', question.ask);
-    Session.set('solved', false);
+    Session.set('qno', _id);
     Meteor.call('setSolution', question.ans);
   };
 
@@ -48,8 +48,8 @@ if(Meteor.isClient) {
     players: function() {
       return players.find({}, {sort: {score: -1}});
     },
-    solved: function() {
-      return Session.get('solved');
+    qno: function() {
+      return Session.get('qno');
     }
   });
   Template.questioner.events({
@@ -58,7 +58,6 @@ if(Meteor.isClient) {
       showQuestion();
     },
     'click #next': function() {
-      Session.set('solved', false);
       showQuestion();
     },
     'click #reset': function() {

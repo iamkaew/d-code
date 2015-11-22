@@ -8,12 +8,14 @@
 
 <!-- สำหรับ แสดงคำถาม -->
 <template name="questioner">
+	<div id="d-code">ถอดรหัส อัจฉริยะ</div>
 	<div id="question">
 		{{#if wait}}
 			<button id="start">Start</button>
 		{{else}}
 			<div class="title">Hint Message</div>
-			<p>{{question}}</p>
+			{{question}}
+			<div id="qno">{{qno}}</div>
 			<button id="next">Next</button>
 		{{/if}}
 	</div>
