@@ -159,7 +159,7 @@ if (Meteor.isServer) {
         }
         else if(_code == code) {
           solved = true;
-          players.update({}, {$set: {status: '', init: false}});
+          players.update({}, {$set: {init: false}}, {multi: true});
           players.update({name: _name}, {$inc: {score: 1}, $set: {status: 'solver'}});
           return 1;
         }
@@ -170,7 +170,7 @@ if (Meteor.isServer) {
       setSolution: function(_code) {
         code = _code;
         solved = false;
-        players.update({}, {$set: {status: '', init: true}});
+        players.update({}, {$set: {status: '', init: true}}, {multi: true});
       }
     });
   });
